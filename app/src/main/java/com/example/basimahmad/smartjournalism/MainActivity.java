@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -29,45 +30,26 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    TextView inbox,articles;
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Smart Journalism");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        session = new SessionManager(getApplicationContext());
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        setTitle("Smart Journalism");
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setItemIconTintList(null);
 
-        inbox=(TextView) MenuItemCompat.getActionView(navigationView.getMenu().
-                findItem(R.id.nav_inbox));
-        articles=(TextView) MenuItemCompat.getActionView(navigationView.getMenu().
-                findItem(R.id.nav_saved_articles));
-//This method will initialize the count value
-        initializeCountDrawer();
+        //add this line to display menu1 when the activity is loaded
+        displaySelectedScreen(R.id.nav_home);
     }
 
     @Override
@@ -102,75 +84,42 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void displaySelectedScreen(int itemId) {
+
+        //creating fragment object
+        Fragment fragment = null;
+
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.nav_home:
+                fragment = new TabsFragment();
+                break;
+            case R.id.nav_profile:
+                fragment = new NewsFeedFragment();
+                break;
+        }
+
+        //replacing the fragment
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_logout) {
-            session.setLogin(false);
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        if (id == R.id.nav_profile) {
-            Intent intent = new Intent(MainActivity.this, Profile.class);
-            startActivity(intent);
-            finish();
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //calling the method displayselectedscreen and passing the id of selected menu
+        displaySelectedScreen(item.getItemId());
+        //make this method blank
         return true;
     }
-    private void initializeCountDrawer(){
-        //Gravity property aligns the text
-        inbox.setGravity(Gravity.CENTER_VERTICAL);
-        inbox.setTypeface(null, Typeface.BOLD);
-        inbox.setTextColor(getResources().getColor(R.color.colorAccent));
-        inbox.setText("9");
-        articles.setGravity(Gravity.CENTER_VERTICAL);
-        articles.setTypeface(null, Typeface.BOLD);
-        articles.setTextColor(getResources().getColor(R.color.colorAccent));
-//count is added
-        articles.setText("7");
-    }
 
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new NewsFeedFragment(), "News Feed");
-        adapter.addFragment(new CategoriesFragment(), "Categorise");
-        adapter.addFragment(new NewsRoomFragment(), "News Room");
-        viewPager.setAdapter(adapter);
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
 }

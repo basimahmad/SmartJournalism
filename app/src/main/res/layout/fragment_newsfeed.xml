@@ -10,6 +10,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="@null"
-        android:paddingTop="48dp"/>
+        android:paddingTop="10dp"/>
 
 </RelativeLayout>

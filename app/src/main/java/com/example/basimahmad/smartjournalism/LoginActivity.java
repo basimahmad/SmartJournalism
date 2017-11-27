@@ -109,6 +109,8 @@ public class LoginActivity extends Activity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+
             }
         });
 
@@ -249,6 +251,7 @@ public class LoginActivity extends Activity {
                         Intent intent = new Intent(LoginActivity.this,
                                 MainActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                         finish();
                     } else {
                         // Error in login. Get the error message
@@ -317,5 +320,6 @@ public class LoginActivity extends Activity {
     public void resetPass(View v) {
         Intent intent = new Intent(LoginActivity.this, ForgetPass.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
         finish();    }
 }

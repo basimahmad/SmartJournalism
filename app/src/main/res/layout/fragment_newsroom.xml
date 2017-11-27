@@ -11,10 +11,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="60dp"
+        android:paddingTop="10dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:background="#fff">
+        android:paddingRight="24dp">
 
         <TextView
             android:id="@+id/textView2"
@@ -83,12 +82,14 @@
         </android.support.design.widget.TextInputLayout>
 
 
-        <ImageButton
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/attachment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
-            android:src="@drawable/attachment"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorAccent"
+            android:gravity="center"
             android:text="Add Attachment"
             android:textColor="#fff" />
 
