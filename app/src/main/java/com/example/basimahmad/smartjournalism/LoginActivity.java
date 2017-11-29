@@ -243,7 +243,16 @@ public class LoginActivity extends Activity {
 
 
                         JSONObject user = jObj.getJSONObject("user");
-                        String email = user.getString("email");
+                        try {
+
+                            JSONObject jsonObject=new JSONObject((String) response);
+                            int user_id=jsonObject.getInt("uid");
+
+                            Log.d(TAG, "user id: "+user_id);
+                            session.setUserID(user_id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
 

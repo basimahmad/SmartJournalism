@@ -1,36 +1,24 @@
 package com.example.basimahmad.smartjournalism;
 
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    FragmentManager manager;
+    private SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +26,14 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        manager = getFragmentManager();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        session = new SessionManager(getApplicationContext());
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -93,18 +82,33 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         //initializing the fragment object which is selected
+        String name = "home";
         switch (itemId) {
             case R.id.nav_home:
+                name = "home";
                 fragment = new TabsFragment();
                 break;
             case R.id.nav_profile:
+                name = "profile";
                 fragment = new ProfileFragment();
+                break;
+            case R.id.nav_logout:
+                Log.d("log", "logout");
+                session.setLogin(false);
+                session.removeUserID();
+                Intent intent = new Intent(MainActivity.this,
+                        LoginActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                finish();
                 break;
         }
 
         //replacing the fragment
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.content_frame, fragment, name);
+            ft.addToBackStack(name);
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }

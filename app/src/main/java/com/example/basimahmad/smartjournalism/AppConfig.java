@@ -13,4 +13,6 @@ public class AppConfig {
 
     public static String URL_FORGETPASS = "http://www.krunchycorner.net/reset_password.php";
 
+    public static String URL_UPLOADNEWS = "http://www.krunchycorner.net/addnews.php";
+
 }

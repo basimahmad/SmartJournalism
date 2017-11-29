@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,7 @@ public class AttachmentFragment extends Fragment{
     private ProgressBar mProgress;
     private Uri mOutputUri;
     private ArrayList<File> mFile = new ArrayList<File>();
-    private ArrayList<String> file_names = new ArrayList<String>();
+    public ArrayList<String> file_names = new ArrayList<String>();
     private RequestQueue mRequest;
     private MultiPartRequest mMultiPartRequest;
     private MediaPlayer mMediaPlayer;
@@ -393,6 +394,14 @@ public class AttachmentFragment extends Fragment{
                 Log.d("names1", file_names.get((file_names.size())-1));
                 Log.d("size", String.valueOf(file_names.size()));
                 mResponse.setText("Server Message\n" + message);
+
+               /* Fragment fragment = new NewsRoomFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.add(R.id.content_frame, fragment, "newsroom");
+                ft.addToBackStack("newsroom");
+                ft.replace(R.id.content_frame, fragment);
+                ft.commit(); */
+
             Log.d("ERROR", String.valueOf(response));}
 
         }
