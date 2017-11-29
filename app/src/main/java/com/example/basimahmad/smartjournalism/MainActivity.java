@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new TabsFragment();
                 break;
             case R.id.nav_profile:
-                fragment = new NewsFeedFragment();
+                fragment = new ProfileFragment();
                 break;
         }
 

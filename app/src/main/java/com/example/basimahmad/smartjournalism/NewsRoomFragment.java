@@ -6,6 +6,7 @@ package com.example.basimahmad.smartjournalism;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,10 @@ public class NewsRoomFragment extends Fragment{
         attachment = (Button) view.findViewById(R.id.attachment);
         attachment.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-               /* Intent intent = new Intent(getActivity(), UploadFiles.class);
-                startActivity(intent);
-                getActivity(). overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);*/
+                Fragment fragment = new AttachmentFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, fragment);
+                ft.commit();
             }
         });
         return view;

@@ -1,10 +1,16 @@
 package com.example.basimahmad.smartjournalism;
 
-import android.app.Activity;
+/**
+ * Created by Basim Ahmad on 11/6/2017.
+ */
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.Cache;
@@ -24,26 +30,37 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Basim Ahmad on 11/14/2017.
- */
-
-public class Profile extends Activity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class ProfileFragment extends Fragment{
+    View view;
+    private static final String TAG = "PROFILE_NEWSFEED";
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<FeedItem> feedItems;
     private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    }
 
-        listView = (ListView) findViewById(R.id.list);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.activity_profile, container, false);
+
+
+
+
+        listView = (ListView) view.findViewById(R.id.list);
 
         feedItems = new ArrayList<FeedItem>();
 
-        listAdapter = new FeedListAdapter(this, feedItems);
+        listAdapter = new FeedListAdapter(getActivity(), feedItems);
         listView.setAdapter(listAdapter);
 
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -95,6 +112,9 @@ public class Profile extends Activity {
             AppController.getInstance().addToRequestQueue(jsonReq);
         }
 
+
+
+        return view;
     }
 
     /**
@@ -134,10 +154,5 @@ public class Profile extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
 
-    }
 }

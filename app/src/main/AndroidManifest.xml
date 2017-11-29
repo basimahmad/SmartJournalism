@@ -3,6 +3,7 @@
     package="com.example.basimahmad.smartjournalism">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".AppController"
@@ -33,9 +34,6 @@
         <activity android:name=".ForgetPass" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MyMaterialTheme"></activity>
-        <activity
-            android:name=".Profile"
             android:theme="@style/MyMaterialTheme"></activity>
     </application>
 
