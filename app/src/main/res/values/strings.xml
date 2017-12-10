@@ -11,4 +11,6 @@
 
     <string name="action_search">Search</string>
     <string name="action_delete">Delete</string>
+
+    <string name="category_prompt">Choose Category</string>
 </resources>

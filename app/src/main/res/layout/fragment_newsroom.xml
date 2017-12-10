@@ -39,6 +39,21 @@
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent"/>
         </android.support.design.widget.TextInputLayout>
+        <!-- Subject Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp">
+            <Spinner
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:prompt="@string/category_prompt"
+                >
+            </Spinner>
+        </android.support.design.widget.TextInputLayout>
 
         <!-- Subject Label -->
         <android.support.design.widget.TextInputLayout
