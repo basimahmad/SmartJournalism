@@ -22,8 +22,9 @@
 
         <activity android:name=".LoginActivity">
             <intent-filter>
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-
+                <!--
+               // <data android:scheme="@string/fb_login_protocol_scheme" />
+                 -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

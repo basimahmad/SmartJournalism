@@ -47,11 +47,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
+
             super.onBackPressed();
-        }
+
     }
 
     @Override
@@ -91,6 +89,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_profile:
                 name = "profile";
                 fragment = new ProfileFragment();
+                break;
+            case R.id.nav_inbox:
+                name = "inbox";
+                fragment = new InboxFragment();
                 break;
             case R.id.nav_logout:
                 Log.d("log", "logout");
