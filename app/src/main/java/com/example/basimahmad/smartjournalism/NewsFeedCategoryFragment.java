@@ -3,56 +3,43 @@ package com.example.basimahmad.smartjournalism;
 /**
  * Created by Basim Ahmad on 11/6/2017.
  */
-import android.app.ActionBar;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.example.basimahmad.smartjournalism.adapter.FeedListAdapter;
-import com.example.basimahmad.smartjournalism.AppController;
-import com.example.basimahmad.smartjournalism.data.FeedItem;
-
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.Menu;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Cache.Entry;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+import com.example.basimahmad.smartjournalism.adapter.FeedListAdapter;
+import com.example.basimahmad.smartjournalism.data.FeedItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class NewsFeedCategoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = "NEWSFEED";
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<FeedItem> feedItems;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String URL_FEED = "http://www.krunchycorner.net/feed.json";
-    public NewsFeedFragment() {
+    String category_text;
+    public NewsFeedCategoryFragment() {
         // Required empty public constructor
     }
 
@@ -66,7 +53,9 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
                              Bundle savedInstanceState) {
 
     final View view = inflater.inflate(R.layout.fragment_newsfeed, container, false);
+         category_text = getArguments().getString("category");
 
+        Toast.makeText(getActivity(),category_text, Toast.LENGTH_LONG).show();
 
 
 
@@ -172,25 +161,27 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             for (int i = (feedArray.length() - 1); i >= 0; i--) {
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
+                if((feedObj.getString("category")).equals(category_text)) {
+                    FeedItem item = new FeedItem();
+                    item.setId(feedObj.getInt("id"));
+                    item.setName(feedObj.getString("name"));
+                    item.setCategory(feedObj.getString("category"));
+                    // Image might be null sometimes
+                    String image = feedObj.isNull("image") ? null : feedObj
+                            .getString("image");
+                    item.setImge(image);
+                    item.setStatus(feedObj.getString("status"));
+                    item.setProfilePic(feedObj.getString("profilePic"));
+                    item.setTimeStamp(feedObj.getString("timeStamp"));
 
-                FeedItem item = new FeedItem();
-                item.setId(feedObj.getInt("id"));
-                item.setName(feedObj.getString("name"));
-                item.setCategory(feedObj.getString("category"));
-                // Image might be null sometimes
-                String image = feedObj.isNull("image") ? null : feedObj
-                        .getString("image");
-                item.setImge(image);
-                item.setStatus(feedObj.getString("status"));
-                item.setProfilePic(feedObj.getString("profilePic"));
-                item.setTimeStamp(feedObj.getString("timeStamp"));
+                    // url might be null sometimes
+                    String feedUrl = feedObj.isNull("url") ? null : feedObj
+                            .getString("url");
+                    item.setUrl(feedUrl);
+                    item.setUserId(feedObj.getInt("userid"));
 
-                // url might be null sometimes
-                String feedUrl = feedObj.isNull("url") ? null : feedObj
-                        .getString("url");
-                item.setUrl(feedUrl);
-                item.setUserId(feedObj.getInt("userid"));
-                feedItems.add(item);
+                    feedItems.add(item);
+                }
             }
 
             // notify data changes to list adapater

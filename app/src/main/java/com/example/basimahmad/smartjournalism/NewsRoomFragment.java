@@ -99,6 +99,7 @@ public class NewsRoomFragment extends Fragment{
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                // Toast.makeText(getActivity(), bankNames[position], Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), bankNames[position], Toast.LENGTH_LONG).show();
                 _category = bankNames[position];
             }
 
