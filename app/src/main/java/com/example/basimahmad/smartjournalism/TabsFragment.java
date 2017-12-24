@@ -50,7 +50,6 @@ public class TabsFragment extends Fragment{
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
         adapter.addFragment(new NewsFeedFragment(), "NewsFeed");
-        adapter.addFragment(new CategoriesFragment(), "Categories");
         adapter.addFragment(new NewsRoomFragment(), "News Room");
         viewPager.setAdapter(adapter);
     }

@@ -19,6 +19,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class FeedListAdapter extends BaseAdapter {
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
 
+        TextView id = (TextView) convertView.findViewById(R.id.id);
         TextView name = (TextView) convertView.findViewById(R.id.name);
         TextView timestamp = (TextView) convertView
                 .findViewById(R.id.timestamp);
@@ -82,8 +84,9 @@ public class FeedListAdapter extends BaseAdapter {
         FeedImageView feedImageView = (FeedImageView) convertView
                 .findViewById(R.id.feedImage1);
 
-        FeedItem item = feedItems.get(position);
-
+        final FeedItem item = feedItems.get(position);
+        String idtext = String.valueOf(item.getId());
+        id.setText(idtext);
         name.setText(item.getName());
 
         // Converting timestamp into x ago format
@@ -135,7 +138,45 @@ public class FeedListAdapter extends BaseAdapter {
             feedImageView.setVisibility(View.GONE);
         }
 
+        profilePic.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d("ProfilePic", String.valueOf(item.getId()));
+            }
+        });
+
+        name.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d("Name", String.valueOf(item.getId()));
+            }
+        });
+
+        statusMsg.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d("Status", String.valueOf(item.getId()));
+            }
+        });
+
+        feedImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d("Image", String.valueOf(item.getId()));
+            }
+        });
+
+
         return convertView;
     }
+
 
 }

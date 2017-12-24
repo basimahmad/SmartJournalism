@@ -30,7 +30,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Cache.Entry;
@@ -58,7 +63,7 @@ public class NewsFeedFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-    View view = inflater.inflate(R.layout.fragment_newsfeed, container, false);
+    final View view = inflater.inflate(R.layout.fragment_newsfeed, container, false);
 
 
 
@@ -69,6 +74,22 @@ public class NewsFeedFragment extends Fragment{
 
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         listView.setAdapter(listAdapter);
+
+
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3)
+            {
+                Log.d("Click: ","click");
+                LinearLayout ll = (LinearLayout) arg1; // get the parent layout view
+                TextView tv = (TextView) ll.findViewById(R.id.id); // get the child text view
+                final String text = tv.getText().toString();
+                Toast.makeText(getActivity().getBaseContext(),text, Toast.LENGTH_LONG).show();
+                Log.d("Click: ",text);
+
+
+            }
+        });*/
 
         // These two lines not needed,
         // just to get the look of facebook (changing background color & hiding the icon)

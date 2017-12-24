@@ -9,6 +9,16 @@
             android:title="Home"
             app:actionViewClass="android.widget.TextView"/>
         <item
+            android:id="@+id/nav_newsroom"
+            android:icon="@drawable/videocamera"
+            android:title="News Room"
+            app:actionViewClass="android.widget.TextView"/>
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/categories"
+            android:title="Categories"
+            app:actionViewClass="android.widget.TextView"/>
+        <item
             android:id="@+id/nav_saved_articles"
             android:icon="@drawable/savedarticles"
             android:title="Saved Articles"

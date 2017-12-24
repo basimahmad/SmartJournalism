@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -84,15 +86,27 @@ public class MainActivity extends AppCompatActivity
         switch (itemId) {
             case R.id.nav_home:
                 name = "home";
-                fragment = new TabsFragment();
+                fragment = new NewsFeedFragment();
                 break;
             case R.id.nav_profile:
                 name = "profile";
                 fragment = new ProfileFragment();
                 break;
+            case R.id.nav_newsroom:
+                name = "newsroom";
+                fragment = new NewsRoomFragment();
+                break;
             case R.id.nav_inbox:
                 name = "inbox";
                 fragment = new InboxFragment();
+                break;
+            case R.id.nav_categories:
+                name = "categories";
+                fragment = new CategoriesFragment();
+                break;
+            case R.id.nav_updateaccount:
+                name = "update_account";
+                fragment = new EditProfileFragment();
                 break;
             case R.id.nav_logout:
                 Log.d("log", "logout");
@@ -129,6 +143,4 @@ public class MainActivity extends AppCompatActivity
         //make this method blank
         return true;
     }
-
-
 }
