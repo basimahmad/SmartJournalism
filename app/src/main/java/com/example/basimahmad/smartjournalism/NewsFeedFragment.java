@@ -6,6 +6,7 @@ package com.example.basimahmad.smartjournalism;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,11 +45,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-public class NewsFeedFragment extends Fragment{
+public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = "NEWSFEED";
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<FeedItem> feedItems;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private String URL_FEED = "http://www.krunchycorner.net/feed.json";
     public NewsFeedFragment() {
         // Required empty public constructor
@@ -75,7 +77,17 @@ public class NewsFeedFragment extends Fragment{
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         listView.setAdapter(listAdapter);
 
-
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Refresh: ","pull");
+                        getNewsFeed();
+                    }
+                }
+        );
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3)
@@ -95,7 +107,13 @@ public class NewsFeedFragment extends Fragment{
         // just to get the look of facebook (changing background color & hiding the icon)
 
 
-        // We first check for cached request
+
+        return view;
+    }
+
+    public void getNewsFeed(){
+
+/*        // We first check for cached request
         Cache cache = AppController.getInstance().getRequestQueue().getCache();
         Entry entry = cache.get(URL_FEED);
         if (entry != null) {
@@ -104,6 +122,7 @@ public class NewsFeedFragment extends Fragment{
                 String data = new String(entry.data, "UTF-8");
                 try {
                     parseJsonFeed(new JSONObject(data));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,7 +130,8 @@ public class NewsFeedFragment extends Fragment{
                 e.printStackTrace();
             }
 
-        } else {
+        } else {*/
+
             // making fresh volley request and getting json
             JsonObjectRequest jsonReq = new JsonObjectRequest(Method.GET,
                     URL_FEED, null, new Response.Listener<JSONObject>() {
@@ -121,6 +141,8 @@ public class NewsFeedFragment extends Fragment{
                     VolleyLog.d(TAG, "Response: " + response.toString());
                     if (response != null) {
                         parseJsonFeed(response);
+                        Log.d("Refresh: ","get data");
+
                     }
                 }
             }, new Response.ErrorListener() {
@@ -133,8 +155,7 @@ public class NewsFeedFragment extends Fragment{
 
             // Adding request to volley request queue
             AppController.getInstance().addToRequestQueue(jsonReq);
-        }
-        return view;
+        //}
     }
 
 
@@ -149,7 +170,7 @@ public class NewsFeedFragment extends Fragment{
         try {
             JSONArray feedArray = response.getJSONArray("feed");
 
-            for (int i = 0; i < feedArray.length(); i++) {
+            for (int i = (feedArray.length() - 1); i >= 0; i--) {
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
 
                 FeedItem item = new FeedItem();
@@ -174,11 +195,19 @@ public class NewsFeedFragment extends Fragment{
 
             // notify data changes to list adapater
             listAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onRefresh() {
+        Log.d("Refresh: ","pull");
+        feedItems.clear();
+        getNewsFeed();
+    }
 }
 
 
