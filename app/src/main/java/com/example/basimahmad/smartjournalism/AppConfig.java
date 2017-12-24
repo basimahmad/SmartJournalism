@@ -15,4 +15,7 @@ public class AppConfig {
 
     public static String URL_UPLOADNEWS = "http://www.krunchycorner.net/addnews.php";
 
+    public static String URL_NAV_USER = "http://www.krunchycorner.net/nav_user.php";
+
+
 }

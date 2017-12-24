@@ -13,14 +13,14 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/nav_profile_pic"
         android:layout_width="match_parent"
         android:layout_height="95dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/dpholderwhit1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
