@@ -1,14 +1,19 @@
 package com.example.basimahmad.smartjournalism;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     FragmentManager manager;
     NavigationView navigationView;
     private ProgressDialog pDialog;
-
+    static Context context;
     private SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,10 @@ public class MainActivity extends AppCompatActivity
 
         manager = getFragmentManager();
 
-
+        MainActivity.context = getApplicationContext();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        }
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);

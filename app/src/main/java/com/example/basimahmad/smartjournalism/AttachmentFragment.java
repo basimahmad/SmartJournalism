@@ -142,6 +142,9 @@ public class AttachmentFragment extends Fragment{
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+
                         if (i == 0) {
                             //Mengambil foto dengan camera
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -380,19 +383,19 @@ public class AttachmentFragment extends Fragment{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                file_names.clear();
+                NewsRoomFragment.file_names.clear();
                 Log.d("names", file1+",,,"+file2+",,,"+file3);
                 if (!file1.equals("kaka")){
-                    file_names.add(file1);
+                    NewsRoomFragment.file_names.add(file1);
                 }
                 if (!file2.equals("kaka")){
-                    file_names.add(file2);
+                    NewsRoomFragment.file_names.add(file2);
                 }
                 if (!file3.equals("kaka")){
-                    file_names.add(file3);
+                    NewsRoomFragment.file_names.add(file3);
                 }
-                Log.d("names1", file_names.get((file_names.size())-1));
-                Log.d("size", String.valueOf(file_names.size()));
+                Log.d("names1", NewsRoomFragment.file_names.get((NewsRoomFragment.file_names.size())-1));
+                Log.d("size", String.valueOf(NewsRoomFragment.file_names.size()));
                 mResponse.setText("Server Message\n" + message);
 
                /* Fragment fragment = new NewsRoomFragment();

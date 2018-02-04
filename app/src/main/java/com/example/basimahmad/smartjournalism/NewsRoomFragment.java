@@ -44,7 +44,7 @@ public class NewsRoomFragment extends Fragment{
     private static final String URL_Categories = "http://www.krunchycorner.net/categories.php";
 
     View view;
-    ArrayList<String> file_names = new ArrayList<String>();
+    static ArrayList<String> file_names = new ArrayList<String>();
     Button attachment;
     FancyButton publish;
     private Spinner category;
@@ -132,7 +132,7 @@ public class NewsRoomFragment extends Fragment{
         Log.d(TAG, "publishNews");
 
 
-        publish.setEnabled(false);
+        //publish.setEnabled(false);
         String title = _title.getText().toString();
         String subject = _subject.getText().toString();
         String desc = _description.getText().toString();
@@ -206,9 +206,10 @@ public class NewsRoomFragment extends Fragment{
                 Map<String, String> params = new HashMap<String, String>();
 
                 AttachmentFragment af = new AttachmentFragment();
-                file_names = af.file_names;
+                Log.d("af", String.valueOf(af.file_names.size()));
 
                 if (file_names.size() == 0){
+                    Log.d("file", "file0");
                     params.put("uid", String.valueOf(session.getUserID()));
                     params.put("title", title);
                     params.put("category", _category);
@@ -216,6 +217,7 @@ public class NewsRoomFragment extends Fragment{
                     params.put("description", desc);
                 }
                 if (file_names.size() == 1){
+                    Log.d("file", "file1");
                    params.put("uid", String.valueOf(session.getUserID()));
                     params.put("title", title);
                     params.put("category", _category);
@@ -224,6 +226,7 @@ public class NewsRoomFragment extends Fragment{
                     params.put("file1", file_names.get(0));
                 }
                 if (file_names.size() == 2){
+                    Log.d("file", "file2");
                     params.put("uid", String.valueOf(session.getUserID()));
                     params.put("title", title);
                     params.put("category", _category);
@@ -233,6 +236,7 @@ public class NewsRoomFragment extends Fragment{
                     params.put("file2", file_names.get(1));
                 }
                 if (file_names.size() == 3){
+                    Log.d("file", "file3");
                     params.put("uid", String.valueOf(session.getUserID()));
                     params.put("title", title);
                     params.put("category", _category);
