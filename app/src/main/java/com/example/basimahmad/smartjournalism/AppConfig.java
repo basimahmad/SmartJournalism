@@ -17,5 +17,10 @@ public class AppConfig {
 
     public static String URL_NAV_USER = "http://www.krunchycorner.net/nav_user.php";
 
+    public static String URL_NEWS_DETAIL = "http://www.krunchycorner.net/news_detail.php";
+
+    public static String URL_ADD_BOOKMARK = "http://www.krunchycorner.net/add_bookamrk.php";
+
+
 
 }

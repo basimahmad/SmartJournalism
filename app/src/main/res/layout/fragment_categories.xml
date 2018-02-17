@@ -19,12 +19,12 @@
         android:layout_height="120dp"
         android:src="@drawable/live"
         android:paddingBottom="10dp"/>
-    <ImageButton
+   <!-- <ImageButton
         android:id="@+id/breaking"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:src="@drawable/breaking"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"/>-->
     <ImageButton
         android:id="@+id/politics"
         android:layout_width="match_parent"

@@ -5,6 +5,7 @@ package com.example.basimahmad.smartjournalism.adapter;
  */
 
 import com.example.basimahmad.smartjournalism.FeedImageView;
+import com.example.basimahmad.smartjournalism.MainActivity;
 import com.example.basimahmad.smartjournalism.NewsFeedFragment;
 import com.example.basimahmad.smartjournalism.R;
 import com.example.basimahmad.smartjournalism.AppController;
@@ -14,7 +15,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -166,6 +169,8 @@ public class FeedListAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 Log.d("Status", String.valueOf(item.getId()));
+                MainActivity.gotoNews(String.valueOf(item.getId()));
+
             }
         });
 
@@ -175,6 +180,7 @@ public class FeedListAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 Log.d("Image", String.valueOf(item.getId()));
+                MainActivity.gotoNews(String.valueOf(item.getId()));
             }
         });
 

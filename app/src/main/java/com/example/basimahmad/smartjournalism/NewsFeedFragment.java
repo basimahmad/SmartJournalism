@@ -88,20 +88,7 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 }
         );
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-            {
-                Log.d("Click: ","click");
-                LinearLayout ll = (LinearLayout) arg1; // get the parent layout view
-                TextView tv = (TextView) ll.findViewById(R.id.id); // get the child text view
-                final String text = tv.getText().toString();
-                Toast.makeText(getActivity().getBaseContext(),text, Toast.LENGTH_LONG).show();
-                Log.d("Click: ",text);
 
-
-            }
-        });*/
 
         // These two lines not needed,
         // just to get the look of facebook (changing background color & hiding the icon)
@@ -110,6 +97,7 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         return view;
     }
+
 
     public void getNewsFeed(){
 

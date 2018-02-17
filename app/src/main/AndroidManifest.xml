@@ -33,6 +33,8 @@
 
         <activity android:name=".SignupActivity" />
         <activity android:name=".ForgetPass" />
+        <activity android:name=".NewsDetailClass" />
+
         <activity
             android:name=".MainActivity"
             android:theme="@style/MyMaterialTheme"></activity>
