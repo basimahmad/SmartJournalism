@@ -6,15 +6,19 @@ package com.example.basimahmad.smartjournalism.adapter;
 
 import com.example.basimahmad.smartjournalism.FeedImageView;
 import com.example.basimahmad.smartjournalism.MainActivity;
+import com.example.basimahmad.smartjournalism.NewsFeedBookmarkFragment;
 import com.example.basimahmad.smartjournalism.NewsFeedFragment;
 import com.example.basimahmad.smartjournalism.R;
 import com.example.basimahmad.smartjournalism.AppController;
+import com.example.basimahmad.smartjournalism.UserProfileFragment;
 import com.example.basimahmad.smartjournalism.data.FeedItem;
-
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +35,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FeedListAdapter extends BaseAdapter {
     private Activity activity;
@@ -93,7 +99,7 @@ public class FeedListAdapter extends BaseAdapter {
         String idtext = String.valueOf(item.getId());
         id.setText(idtext);
         name.setText(item.getName());
-        String useridtext = String.valueOf(item.getUserId());
+        final String useridtext = String.valueOf(item.getUserId());
         user_id.setText(useridtext);
         category.setText(item.getCategory());
         // Converting timestamp into x ago format
@@ -151,6 +157,19 @@ public class FeedListAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 Log.d("ProfilePic", String.valueOf(item.getId()));
+                SharedPreferences.Editor editor = activity.getSharedPreferences("SMART", MODE_PRIVATE).edit();
+                editor.putString("profile_user_id", useridtext);
+                editor.apply();
+
+                Fragment fragment = new UserProfileFragment();
+
+                if (fragment != null) {
+                    FragmentTransaction ft = ((FragmentActivity)activity).getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.content_frame, fragment, "user_profile");
+                    ft.addToBackStack("user_profile");
+                    ft.replace(R.id.content_frame, fragment);
+                    ft.commit();
+                }
             }
         });
 
@@ -160,6 +179,20 @@ public class FeedListAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 Log.d("Name", String.valueOf(item.getId()));
+                SharedPreferences.Editor editor = activity.getSharedPreferences("SMART", MODE_PRIVATE).edit();
+                editor.putString("profile_user_id", useridtext);
+                editor.apply();
+
+                Fragment fragment = new UserProfileFragment();
+
+                if (fragment != null) {
+                    FragmentTransaction ft = ((FragmentActivity)activity).getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.content_frame, fragment, "user_profile");
+                    ft.addToBackStack("user_profile");
+                    ft.replace(R.id.content_frame, fragment);
+                    ft.commit();
+                }
+
             }
         });
 

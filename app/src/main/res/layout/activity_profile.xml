@@ -38,7 +38,8 @@ android:background="#fff">
                     android:layout_height="150dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="45dp"
-                    android:src="@drawable/dpholder" />
+                    android:src="@drawable/dpholder"
+                    android:id="@+id/profile_pic"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,7 +49,8 @@ android:background="#fff">
                     android:text="Name"
                     android:textColor="#fff"
                     android:textSize="21sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/profile_name"/>
             </LinearLayout>
 
             <android.support.v7.widget.CardView
@@ -75,7 +77,8 @@ android:background="#fff">
                             android:layout_height="wrap_content"
                             android:text="News Submitted"
                             android:textSize="20sp"
-                            android:textColor="#000"/>
+                            android:textColor="#000"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -84,7 +87,8 @@ android:background="#fff">
                             android:text="125"
                             android:textColor="@color/colorAccent"
                             android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/profile_news_submitted"/>
 
                     </LinearLayout>
 
@@ -109,7 +113,8 @@ android:background="#fff">
                             android:text="125"
                             android:textColor="@color/colorAccent"
                             android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/profile_news_approved"/>
 
                     </LinearLayout>
 
@@ -145,7 +150,8 @@ android:background="#fff">
                     android:paddingLeft="20dp"
                     android:text="Wiliam@gmail.com"
                     android:textStyle="bold"
-                    android:textColor="#000"/>
+                    android:textColor="#000"
+                    android:id="@+id/profile_email"/>
             </LinearLayout>
 
             <LinearLayout
@@ -168,7 +174,8 @@ android:background="#fff">
                     android:paddingLeft="20dp"
                     android:text="+266 225 225"
                     android:textStyle="bold"
-                    android:textColor="#000"/>
+                    android:textColor="#000"
+                    android:id="@+id/profile_mb"/>
             </LinearLayout>
 
 
@@ -187,13 +194,13 @@ android:background="#fff">
 
                 <TextView
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
                     android:text="Street 4, Rawalpindi"
                     android:textStyle="bold"
-                    android:textColor="#000"/>
+                    android:textColor="#000"
+                    android:id="@+id/profile_address"/>
             </LinearLayout>
 
             <LinearLayout

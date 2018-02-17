@@ -4,15 +4,14 @@ package com.example.basimahmad.smartjournalism;
  * Created by Basim Ahmad on 11/6/2017.
  */
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileFragment extends Fragment{
+import static android.content.Context.MODE_PRIVATE;
+
+public class UserProfileFragment extends Fragment{
     View view;
     private ProgressDialog pDialog;
     private static final String TAG = "PROFILE_NEWSFEED";
@@ -48,7 +49,7 @@ public class ProfileFragment extends Fragment{
     private List<FeedItem> feedItems;
     private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
     private SessionManager session;
-    public ProfileFragment() {
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -77,7 +78,16 @@ public class ProfileFragment extends Fragment{
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         listView.setAdapter(listAdapter);
 
-        getuser();
+        SharedPreferences prefs = getContext().getSharedPreferences("SMART", MODE_PRIVATE);
+        String restoredID = prefs.getString("profile_user_id", null);
+        if (restoredID != null) {
+            Toast.makeText(getContext(),
+                    "User not found", Toast.LENGTH_LONG).show();
+        }
+        else {
+            getuser(restoredID);
+        }
+
 
 
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -174,7 +184,7 @@ public class ProfileFragment extends Fragment{
         }
     }
 
-    private void getuser() {
+    private void getuser(final String user_id) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -274,7 +284,7 @@ public class ProfileFragment extends Fragment{
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(session.getUserID()));
+                params.put("id", user_id);
 
                 return params;
             }
