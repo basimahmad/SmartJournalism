@@ -148,9 +148,17 @@ public class MainActivity extends AppCompatActivity
                 name = "categories";
                 fragment = new CategoriesFragment();
                 break;
+            case R.id.nav_saved_articles:
+                name = "bookmarks";
+                fragment = new NewsFeedBookmarkFragment();
+                break;
             case R.id.nav_updateaccount:
                 name = "update_account";
                 fragment = new EditProfileFragment();
+                break;
+            case R.id.nav_publishednews:
+                name = "published_news";
+                fragment = new PublishedNewsFeedFragment();
                 break;
             case R.id.nav_logout:
                 Log.d("log", "logout");

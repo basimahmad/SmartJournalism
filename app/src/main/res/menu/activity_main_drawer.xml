@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_saved_articles"
             android:icon="@drawable/savedarticles"
-            android:title="Saved Articles"
+            android:title="Bookmarks"
             app:actionViewClass="android.widget.TextView"/>
         <item
             android:id="@+id/nav_publishednews"

@@ -39,6 +39,7 @@ public class NewsDetailClass extends Activity{
     ImageButton bookmark_button;
     String news_id = "";
     SessionManager session;
+    boolean bookmark_check = false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_news_detail);
@@ -53,18 +54,44 @@ public class NewsDetailClass extends Activity{
         session = new SessionManager(NewsDetailClass.this);
 
 
+
+
+
         bookmark_button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
-                {
-                    ((ImageButton) bookmark_button).setImageResource(getResources().getIdentifier("bookmark_select", "drawable", getPackageName()));
+
+                if(bookmark_check){
+                    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
+                    {
+                        ((ImageButton) bookmark_button).setImageResource(getResources().getIdentifier("bookmark", "drawable", getPackageName()));
+                    }
+                    else
+                    {
+                        ((ImageButton) bookmark_button).setImageDrawable(getDrawable(getResources().getIdentifier("bookmark", "drawable", getPackageName())));
+                    }
+
+                    removeBookmark();
+
                 }
-                else
-                {
-                    ((ImageButton) bookmark_button).setImageDrawable(getDrawable(getResources().getIdentifier("bookmark_select", "drawable", getPackageName())));
-                }                addBookmark();
+                else {
+
+                    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
+                    {
+                        ((ImageButton) bookmark_button).setImageResource(getResources().getIdentifier("bookmark_select", "drawable", getPackageName()));
+                    }
+                    else
+                    {
+                        ((ImageButton) bookmark_button).setImageDrawable(getDrawable(getResources().getIdentifier("bookmark_select", "drawable", getPackageName())));
+                    }
+
+                    addBookmark();
+
+                }
+
+
+
             }
         });
 
@@ -74,7 +101,7 @@ public class NewsDetailClass extends Activity{
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
-        pDialog.setMessage("Publishing ...");
+        pDialog.setMessage("Adding Bookmark ...");
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -91,6 +118,7 @@ public class NewsDetailClass extends Activity{
                     if (!error) {
                         Log.d(TAG,  response);
                         Toast.makeText(NewsDetailClass.this, "Bookmark Added", Toast.LENGTH_LONG).show();
+                        bookmark_check = true;
 
 
                     } else {
@@ -138,6 +166,76 @@ public class NewsDetailClass extends Activity{
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    private void removeBookmark() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+
+        pDialog.setMessage("Removing Bookmark ...");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_REMOVE_BOOKMARK, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Server Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        Log.d(TAG,  response);
+                        Toast.makeText(NewsDetailClass.this, "Bookmark Removed", Toast.LENGTH_LONG).show();
+                        bookmark_check = false;
+
+
+
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        Log.d(TAG,  response);
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(NewsDetailClass.this,
+                                errorMsg, Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Server Error: " + error.getMessage());
+                Toast.makeText(NewsDetailClass.this,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id", String.valueOf(session.getUserID()));
+                params.put("news_id", news_id);
+
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+
     private void getNews(final String news_id) {
 
         // Tag used to cancel the request
@@ -149,6 +247,7 @@ public class NewsDetailClass extends Activity{
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_NEWS_DETAIL, new Response.Listener<String>() {
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Server Response: " + response.toString());
@@ -163,6 +262,31 @@ public class NewsDetailClass extends Activity{
 
                         TextView tv_title = (TextView) findViewById(R.id.news_title);
                         tv_title.setText(jObj.getString("title"));
+
+                        bookmark_check = jObj.getBoolean("bookmark");
+                        Log.d("BOOKMARK", String.valueOf(jObj.getBoolean("bookmark")));
+                        if(bookmark_check){
+                            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
+                            {
+                                ((ImageButton) bookmark_button).setImageResource(getResources().getIdentifier("bookmark_select", "drawable", getPackageName()));
+                            }
+                            else
+                            {
+                                ((ImageButton) bookmark_button).setImageDrawable(getDrawable(getResources().getIdentifier("bookmark_select", "drawable", getPackageName())));
+                            }
+
+                        }
+                        else {
+                            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN )
+                            {
+                                ((ImageButton) bookmark_button).setImageResource(getResources().getIdentifier("bookmark", "drawable", getPackageName()));
+                            }
+                            else
+                            {
+                                ((ImageButton) bookmark_button).setImageDrawable(getDrawable(getResources().getIdentifier("bookmark", "drawable", getPackageName())));
+                            }
+
+                        }
 
                         TextView tv_date = (TextView) findViewById(R.id.news_timestamp);
                         tv_date.setText(jObj.getString("date_time"));
@@ -219,6 +343,7 @@ public class NewsDetailClass extends Activity{
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", String.valueOf(session.getUserID()));
                 params.put("news_id", news_id);
 
                 return params;

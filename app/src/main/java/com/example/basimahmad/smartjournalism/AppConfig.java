@@ -21,6 +21,12 @@ public class AppConfig {
 
     public static String URL_ADD_BOOKMARK = "http://www.krunchycorner.net/add_bookamrk.php";
 
+    public static String URL_REMOVE_BOOKMARK = "http://www.krunchycorner.net/remove_bookmark.php";
+
+    public static String URL_BOOKAMERKS_LIST = "http://www.krunchycorner.net/get_bookmarks.php";
+
+
+
 
 
 }
