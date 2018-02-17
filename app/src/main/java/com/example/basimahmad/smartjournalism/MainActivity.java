@@ -4,11 +4,15 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -46,6 +50,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static Uri imageuri;
+
     FragmentManager manager;
     NavigationView navigationView;
     private ProgressDialog pDialog;
@@ -300,6 +306,40 @@ public class MainActivity extends AppCompatActivity
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("REQ", String.valueOf(requestCode));
+        if (resultCode == RESULT_OK) {
+            Log.d("ABC", "1 "+String.valueOf(requestCode));
+            if(requestCode == 31){
+                Uri picUri = data.getData();
+
+                String filePath = getPath(picUri);
+                Log.d("filePath", filePath);
+
+
+
+            }
+            else if(requestCode == 32){
+                String filePath = getPath(MainActivity.imageuri);
+                Log.d("filePath", filePath);
+            }
+
+        }
+
+
+    }
+
+    private String getPath(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
     }
 
 
