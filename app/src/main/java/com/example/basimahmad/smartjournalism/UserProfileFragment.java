@@ -4,14 +4,19 @@ package com.example.basimahmad.smartjournalism;
  * Created by Basim Ahmad on 11/6/2017.
  */
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,11 +49,10 @@ public class UserProfileFragment extends Fragment{
     View view;
     private ProgressDialog pDialog;
     private static final String TAG = "PROFILE_NEWSFEED";
-    private ListView listView;
-    private FeedListAdapter listAdapter;
-    private List<FeedItem> feedItems;
-    private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
     private SessionManager session;
+    String restoredID = "";
+    Button send_message;
+    String fname = "";
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -71,16 +75,9 @@ public class UserProfileFragment extends Fragment{
         pDialog = new ProgressDialog(getContext());
         pDialog.setCancelable(false);
 
-        listView = (ListView) view.findViewById(R.id.list);
-
-        feedItems = new ArrayList<FeedItem>();
-
-        listAdapter = new FeedListAdapter(getActivity(), feedItems);
-        listView.setAdapter(listAdapter);
-
         SharedPreferences prefs = getContext().getSharedPreferences("SMART", MODE_PRIVATE);
-        String restoredID = prefs.getString("profile_user_id", null);
-        if (restoredID != null) {
+         restoredID = prefs.getString("profile_user_id", null);
+        if (restoredID == null) {
             Toast.makeText(getContext(),
                     "User not found", Toast.LENGTH_LONG).show();
         }
@@ -88,56 +85,31 @@ public class UserProfileFragment extends Fragment{
             getuser(restoredID);
         }
 
+        send_message = (Button) view.findViewById(R.id.user_send_message);
 
+        send_message.setOnClickListener(new View.OnClickListener() {
 
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Disallow the touch request for parent scroll on touch of child view
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences("SMART", MODE_PRIVATE).edit();
+                editor.putString("profile_chatWith_name", fname);
+                editor.apply();
+
+
+
+                Fragment fragment = new ChatFragment();
+
+                if (fragment != null) {
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.content_frame, fragment, "chat");
+                    ft.addToBackStack("chat");
+                    ft.replace(R.id.content_frame, fragment);
+                    ft.commit();
+                }
+
             }
         });
-        // We first check for cached request
-        Cache cache = AppController.getInstance().getRequestQueue().getCache();
-        Cache.Entry entry = cache.get(URL_FEED);
-        if (entry != null) {
-            // fetch the data from cache
-            try {
-                String data = new String(entry.data, "UTF-8");
-                try {
-                    parseJsonFeed(new JSONObject(data));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            // making fresh volley request and getting json
-            JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET,
-                    URL_FEED, null, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    VolleyLog.d(TAG, "Response: " + response.toString());
-                    if (response != null) {
-                        parseJsonFeed(response);
-                    }
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
-                }
-            });
-
-            // Adding request to volley request queue
-            AppController.getInstance().addToRequestQueue(jsonReq);
-        }
 
 
 
@@ -147,42 +119,6 @@ public class UserProfileFragment extends Fragment{
     /**
      * Parsing json reponse and passing the data to feed view list adapter
      * */
-    private void parseJsonFeed(JSONObject response) {
-        try {
-            JSONArray feedArray = response.getJSONArray("feed");
-
-            for (int i = 0; i < feedArray.length(); i++) {
-                JSONObject feedObj = (JSONObject) feedArray.get(i);
-
-                if(String.valueOf(session.getUserID()).equals(feedObj.getInt("userid"))) {
-
-                    FeedItem item = new FeedItem();
-                    item.setId(feedObj.getInt("id"));
-                    item.setName(feedObj.getString("name"));
-
-                    // Image might be null sometimes
-                    String image = feedObj.isNull("image") ? null : feedObj
-                            .getString("image");
-                    item.setImge(image);
-                    item.setStatus(feedObj.getString("status"));
-                    item.setProfilePic(feedObj.getString("profilePic"));
-                    item.setTimeStamp(feedObj.getString("timeStamp"));
-
-                    // url might be null sometimes
-                    String feedUrl = feedObj.isNull("url") ? null : feedObj
-                            .getString("url");
-                    item.setUrl(feedUrl);
-
-                    feedItems.add(item);
-                }
-            }
-
-            // notify data changes to list adapater
-            listAdapter.notifyDataSetChanged();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void getuser(final String user_id) {
         // Tag used to cancel the request
@@ -212,9 +148,9 @@ public class UserProfileFragment extends Fragment{
                             String first_name=jsonObject.getString("first_name");
                             String last_name=jsonObject.getString("last_name");
                             String pic_link=jsonObject.getString("pic");
-                            Log.d("MainActivity", "Pic: " + pic_link);
+                            Log.d("USERPROFILEFRAGMENT", "Pic: " + pic_link);
                             String name = first_name +" "+last_name;
-
+                            fname = first_name;
 
                             TextView profile_name = (TextView) view.findViewById(R.id.profile_name);
                             profile_name.setText(name);
@@ -304,6 +240,8 @@ public class UserProfileFragment extends Fragment{
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
+
 
 
 

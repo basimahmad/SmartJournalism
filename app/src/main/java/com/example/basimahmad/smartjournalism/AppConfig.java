@@ -25,6 +25,9 @@ public class AppConfig {
 
     public static String URL_BOOKAMERKS_LIST = "http://www.krunchycorner.net/get_bookmarks.php";
 
+    public static String URL_UPLOAD_IMAGE = "http://www.krunchycorner.net/upload_profile_pic.php";
+
+
 
 
 

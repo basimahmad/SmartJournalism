@@ -38,6 +38,8 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/MyMaterialTheme"></activity>
+        <activity android:name=".Users" />
+        <activity android:name=".Chat" />
     </application>
 
 </manifest>

@@ -211,26 +211,35 @@ android:background="#fff">
                 android:paddingLeft="25dp">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <Button
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="20dp"
-                    android:text="News Published By Basim"
+                    android:text="View Pubished News"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="20dp" />
+                    android:id="@+id/user_published_news"/>
+
             </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="fill_parent"
-                android:layout_height="520dp"
-                android:divider="@null"
-                android:paddingTop="15dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal"
+                android:paddingLeft="25dp">
+
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Send Message"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:id="@+id/user_send_message"/>
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

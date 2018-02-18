@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart Journalism</string>
+    <string name="app_name">Citizen Journalism App</string>
     <string name="facebook_app_id">159340687985653</string>
     <string name="fb_login_protocol_scheme">fbAPP_ID</string>
     <string name="title_activity_main">MainActivity</string>

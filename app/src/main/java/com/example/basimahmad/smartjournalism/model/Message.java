@@ -9,8 +9,36 @@ public class Message {
     private String from;
     private String subject;
     private String message;
+    private String date;
     private String timestamp;
+    private String from_id;
+    private String to_id;
     private String picture;
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTo_id() {
+        return to_id;
+    }
+
+    public void setTo_id(String to_id) {
+        this.to_id = to_id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getFrom_id() {
+        return from_id;
+    }
+
+    public void setFrom_id(String from_id) {
+        this.from_id = from_id;
+    }
+
     private boolean isImportant;
     private boolean isRead;
     private int color = -1;

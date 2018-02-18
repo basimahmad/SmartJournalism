@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        get_nav_user();
+             get_nav_user();
         //add this line to display menu1 when the activity is loaded
         displaySelectedScreen(R.id.nav_home);
     }
@@ -316,14 +316,26 @@ public class MainActivity extends AppCompatActivity
                 Uri picUri = data.getData();
 
                 String filePath = getPath(picUri);
+                imageuri = picUri;
                 Log.d("filePath", filePath);
 
-
+               /* ImageView edit_profile_pic = (ImageView)findViewById(R.id.edit_profile_img_back);
+                Picasso.with(MainActivity.this).load(imageuri)
+                        .placeholder(R.drawable.dpholderwhit1)
+                        .error(R.drawable.dpholderwhit1)
+                        .into(edit_profile_pic);
+*/
 
             }
             else if(requestCode == 32){
                 String filePath = getPath(MainActivity.imageuri);
                 Log.d("filePath", filePath);
+                /*ImageView edit_profile_pic = (ImageView)findViewById(R.id.edit_profile_img_back);
+                Picasso.with(MainActivity.this).load(imageuri)
+                        .placeholder(R.drawable.dpholderwhit1)
+                        .error(R.drawable.dpholderwhit1)
+                        .into(edit_profile_pic);
+*/
             }
 
         }

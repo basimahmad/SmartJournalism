@@ -6,8 +6,10 @@ package com.example.basimahmad.smartjournalism;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,20 +17,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +47,8 @@ public class EditProfileFragment extends Fragment{
     View view;
     private ProgressDialog pDialog;
     private SessionManager session;
+
+    private Button edit_update;
     public EditProfileFragment() {
         // Required empty public constructor
     }
@@ -86,6 +97,29 @@ public class EditProfileFragment extends Fragment{
 
                         })
                         .show();
+            }
+        });
+
+
+        edit_update = (Button) view.findViewById(R.id.edit_update);
+        edit_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                TextView profile_name_edit_last = (TextView) view.findViewById(R.id.edit_input_last_name);
+                TextView profile_name_edit = (TextView) view.findViewById(R.id.edit_input_first_name);
+                TextView profile_email = (TextView) view.findViewById(R.id.edit_input_email);
+                TextView profile_mb = (TextView) view.findViewById(R.id.edit_input_phone);
+                TextView profile_address = (TextView) view.findViewById(R.id.edit_input_address);
+
+                String first_name = profile_name_edit.getText().toString();
+                String last_name = profile_name_edit_last.getText().toString();
+
+                String email = profile_email.getText().toString();
+                String mb = profile_mb.getText().toString();
+                String address = profile_address.getText().toString();
+
+
             }
         });
 
@@ -234,5 +268,174 @@ public class EditProfileFragment extends Fragment{
         getActivity().startActivityForResult(intent, 32);
 
     }
+
+
+
+
+/*
+    public void uploaduserimage(){
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, myurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.i("Myresponse",""+response);
+                Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Mysmart",""+error);
+                Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+
+                String images = getStringImage(bitmap);
+                Log.i("Mynewsam",""+images);
+                param.put("image",images);
+                return param;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+
+    }
+*/
+
+    private String decodeFile(String path,int DESIREDWIDTH, int DESIREDHEIGHT) {
+        String strMyImagePath = null;
+        Bitmap scaledBitmap = null;
+
+        try {
+            // Part 1: Decode image
+            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+
+            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+                // Part 2: Scale image
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+            } else {
+                unscaledBitmap.recycle();
+                return path;
+            }
+
+            // Store to tmp file
+
+            String extr = Environment.getExternalStorageDirectory().toString();
+            File mFolder = new File(extr + "/TMMFOLDER");
+            if (!mFolder.exists()) {
+                mFolder.mkdir();
+            }
+
+            String s = "tmp.png";
+
+            File f = new File(mFolder.getAbsolutePath(), s);
+
+            strMyImagePath = f.getAbsolutePath();
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(f);
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+            scaledBitmap.recycle();
+        } catch (Throwable e) {
+        }
+
+        if (strMyImagePath == null) {
+            return path;
+        }
+        return strMyImagePath;
+
+    }
+
+  /*  private void sendData() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "upload_data";
+
+
+        com.android.volley.request.StringRequest strReq = new com.android.volley.request.StringRequest(Request.Method.POST,
+                AppConfig.URL_UPDATE_PROFILE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("UPDATE_PROFILE", "Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                "Data Uploaded", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+
+
+                    }
+                }catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity().getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("UPDATE_PROFILE", "Sales Error: " + error.getMessage());
+                Toast.makeText(getActivity().getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", String.valueOf(session.getUserID()));
+                params.put("date", current_date1);
+                params.put("sales_type", purchase_type_db);
+                params.put("currency_type", cur_db1);
+                params.put("amount", String.valueOf(amount_db1));
+                params.put("image", String.valueOf(FragmentForms.image2));
+                params.put("lat", MainActivity.final_lat);
+                params.put("lng", MainActivity.final_lng);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+*/
+
 
 }

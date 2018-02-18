@@ -156,7 +156,8 @@ public class FeedListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v)
             {
-                Log.d("ProfilePic", String.valueOf(item.getId()));
+
+                Log.d("ProfilePic", useridtext);
                 SharedPreferences.Editor editor = activity.getSharedPreferences("SMART", MODE_PRIVATE).edit();
                 editor.putString("profile_user_id", useridtext);
                 editor.apply();
@@ -178,7 +179,7 @@ public class FeedListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v)
             {
-                Log.d("Name", String.valueOf(item.getId()));
+                Log.d("Name", useridtext);
                 SharedPreferences.Editor editor = activity.getSharedPreferences("SMART", MODE_PRIVATE).edit();
                 editor.putString("profile_user_id", useridtext);
                 editor.apply();

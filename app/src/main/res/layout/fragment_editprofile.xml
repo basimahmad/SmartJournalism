@@ -286,10 +286,16 @@
                     </android.support.design.widget.TextInputLayout>
 
 
-
                 </LinearLayout>
 
             </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_update"
+                android:text="UPDATE"
+                android:textColor="@color/white"
+                android:background="@color/colorAccent"/>
 
         </LinearLayout>
 
