@@ -414,6 +414,8 @@ public class AttachmentFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            Log.d("IMAGEUPLOAD", "1");
+
             if (requestCode == Template.Code.FILE_MANAGER_CODE) {
                 setFile(requestCode, data.getData());
                 setView(requestCode, data.getData());

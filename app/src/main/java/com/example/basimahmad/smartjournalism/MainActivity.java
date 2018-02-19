@@ -47,6 +47,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import Tempelate.Template;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -308,40 +310,21 @@ public class MainActivity extends AppCompatActivity
             pDialog.dismiss();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+   /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("REQ", String.valueOf(requestCode));
         if (resultCode == RESULT_OK) {
-            Log.d("ABC", "1 "+String.valueOf(requestCode));
-            if(requestCode == 31){
-                Uri picUri = data.getData();
-
-                String filePath = getPath(picUri);
-                imageuri = picUri;
-                Log.d("filePath", filePath);
-
-               /* ImageView edit_profile_pic = (ImageView)findViewById(R.id.edit_profile_img_back);
-                Picasso.with(MainActivity.this).load(imageuri)
-                        .placeholder(R.drawable.dpholderwhit1)
-                        .error(R.drawable.dpholderwhit1)
-                        .into(edit_profile_pic);
-*/
-
-            }
-            else if(requestCode == 32){
-                String filePath = getPath(MainActivity.imageuri);
-                Log.d("filePath", filePath);
-                /*ImageView edit_profile_pic = (ImageView)findViewById(R.id.edit_profile_img_back);
-                Picasso.with(MainActivity.this).load(imageuri)
-                        .placeholder(R.drawable.dpholderwhit1)
-                        .error(R.drawable.dpholderwhit1)
-                        .into(edit_profile_pic);
-*/
+            if (requestCode == Template.Code.FILE_MANAGER_CODE) {
+                Log.d("IMAGEUPLOAD", "sda");
+            } else {
+                Log.d("IMAGEUPLOAD", "123");
             }
 
+        } else {
+           // resetView();
         }
 
 
-    }
+    }*/
 
     private String getPath(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
