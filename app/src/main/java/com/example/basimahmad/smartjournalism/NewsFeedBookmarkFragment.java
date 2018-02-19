@@ -140,7 +140,7 @@ public class NewsFeedBookmarkFragment extends Fragment implements SwipeRefreshLa
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
                 if(news_list.contains(feedObj.getString("id"))) {
                     FeedItem item = new FeedItem();
-                    item.setId(feedObj.getInt("id"));
+                    item.setId(feedObj.getString("id"));
                     item.setName(feedObj.getString("name"));
                     item.setCategory(feedObj.getString("category"));
                     // Image might be null sometimes
@@ -155,7 +155,7 @@ public class NewsFeedBookmarkFragment extends Fragment implements SwipeRefreshLa
                     String feedUrl = feedObj.isNull("url") ? null : feedObj
                             .getString("url");
                     item.setUrl(feedUrl);
-                    item.setUserId(feedObj.getInt("userid"));
+                    item.setUserId(feedObj.getString("userid"));
 
                     feedItems.add(item);
                 }

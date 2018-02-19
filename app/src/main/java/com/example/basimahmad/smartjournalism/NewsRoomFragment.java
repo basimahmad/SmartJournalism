@@ -53,7 +53,7 @@ public class NewsRoomFragment extends Fragment{
     private ProgressDialog pDialog;
     private SessionManager session;
     ArrayList<String> bankNames1= new ArrayList<String>();
-    String[] bankNames = {"Politics", "Entertainment", "Sports", "Weather", "Religion"};
+    String[] bankNames = {"Politics", "Sports", "Entertainment","Technology","Sports","Religion", "Weather"};
     String _category = "Politics";
     public NewsRoomFragment() {
         // Required empty public constructor
@@ -100,7 +100,7 @@ public class NewsRoomFragment extends Fragment{
                                        int position, long id) {
                // Toast.makeText(getActivity(), bankNames[position], Toast.LENGTH_LONG).show();
                // Toast.makeText(getActivity(), bankNames[position], Toast.LENGTH_LONG).show();
-                _category = bankNames[position];
+                _category = String.valueOf(position);
             }
 
             @Override

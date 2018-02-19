@@ -5,14 +5,14 @@ package com.example.basimahmad.smartjournalism.data;
  */
 
 public class FeedItem {
-    private int id, user_id;
+    private String id, user_id;
     private String name,category, status, image, profilePic, timeStamp, url;
 
     public FeedItem() {
     }
 
-    public FeedItem(int id, String name, String category, String image, String status,
-                    String profilePic, String timeStamp, String url, int user_id) {
+    public FeedItem(String id, String name, String category, String image, String status,
+                    String profilePic, String timeStamp, String url, String user_id) {
         super();
         this.id = id;
         this.name = name;
@@ -25,19 +25,19 @@ public class FeedItem {
         this.user_id = user_id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return user_id;
     }
 
-    public void setUserId(int user_id) {
+    public void setUserId(String user_id) {
         this.user_id = user_id;
     }
 

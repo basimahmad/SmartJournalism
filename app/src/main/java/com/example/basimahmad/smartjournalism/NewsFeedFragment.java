@@ -140,6 +140,7 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
                     VolleyLog.d(TAG, "Error: " + error.getMessage());
                 }
             });
+        jsonReq.setShouldCache(false);
 
             // Adding request to volley request queue
             AppController.getInstance().addToRequestQueue(jsonReq);
@@ -162,7 +163,7 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
 
                 FeedItem item = new FeedItem();
-                item.setId(feedObj.getInt("id"));
+                item.setId(feedObj.getString("id"));
                 item.setName(feedObj.getString("name"));
                 item.setCategory(feedObj.getString("category"));
                 // Image might be null sometimes
@@ -177,7 +178,7 @@ public class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnR
                 String feedUrl = feedObj.isNull("url") ? null : feedObj
                         .getString("url");
                 item.setUrl(feedUrl);
-                item.setUserId(feedObj.getInt("userid"));
+                item.setUserId(feedObj.getString("userid"));
                 feedItems.add(item);
             }
 

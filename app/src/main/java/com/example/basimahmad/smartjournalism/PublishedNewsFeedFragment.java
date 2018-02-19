@@ -42,7 +42,6 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
     public PublishedNewsFeedFragment() {
         // Required empty public constructor
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +49,12 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState){
 
-    final View view = inflater.inflate(R.layout.fragment_newsfeed, container, false);
-
+        final View view = inflater.inflate(R.layout.fragment_newsfeed, container, false);
 
         session = new SessionManager(getContext());
+
 
 
         listView = (ListView) view.findViewById(R.id.list);
@@ -89,28 +88,49 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
 
     public void getNewsFeed(){
 
-            JsonObjectRequest jsonReq = new JsonObjectRequest(Method.GET,
-                    URL_FEED, null, new Response.Listener<JSONObject>() {
+/*        // We first check for cached request
+        Cache cache = AppController.getInstance().getRequestQueue().getCache();
+        Entry entry = cache.get(URL_FEED);
+        if (entry != null) {
+            // fetch the data from cache
+            try {
+                String data = new String(entry.data, "UTF-8");
+                try {
+                    parseJsonFeed(new JSONObject(data));
 
-                @Override
-                public void onResponse(JSONObject response) {
-                    VolleyLog.d(TAG, "Response: " + response.toString());
-                    if (response != null) {
-                        parseJsonFeed(response);
-                        Log.d("Refresh: ","get data");
-
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, new Response.ErrorListener() {
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
+        } else {*/
+
+        // making fresh volley request and getting json
+        JsonObjectRequest jsonReq = new JsonObjectRequest(Method.GET,
+                URL_FEED, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                VolleyLog.d(TAG, "Response: " + response.toString());
+                if (response != null) {
+                    parseJsonFeed(response);
+                    Log.d("Refresh: ","get data");
+
                 }
-            });
+            }
+        }, new Response.ErrorListener() {
 
-            // Adding request to volley request queue
-            AppController.getInstance().addToRequestQueue(jsonReq);
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        jsonReq.setShouldCache(false);
+
+        // Adding request to volley request queue
+        AppController.getInstance().addToRequestQueue(jsonReq);
         //}
     }
 
@@ -129,12 +149,9 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
             for (int i = (feedArray.length() - 1); i >= 0; i--) {
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
 
-                if(String.valueOf(session.getUserID()).equals(feedObj.getInt("userid"))) {
-
-
-                    FeedItem item = new FeedItem();
-
-                    item.setId(feedObj.getInt("id"));
+                FeedItem item = new FeedItem();
+                if(String.valueOf(session.getUserID()).equals(feedObj.getString("userid"))) {
+                    item.setId(feedObj.getString("id"));
                     item.setName(feedObj.getString("name"));
                     item.setCategory(feedObj.getString("category"));
                     // Image might be null sometimes
@@ -149,7 +166,7 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
                     String feedUrl = feedObj.isNull("url") ? null : feedObj
                             .getString("url");
                     item.setUrl(feedUrl);
-                    item.setUserId(feedObj.getInt("userid"));
+                    item.setUserId(feedObj.getString("userid"));
                     feedItems.add(item);
                 }
             }
@@ -170,6 +187,8 @@ public class PublishedNewsFeedFragment extends Fragment implements SwipeRefreshL
         getNewsFeed();
     }
 }
+
+
 
 
 
