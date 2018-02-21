@@ -17,6 +17,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -64,7 +65,8 @@ public class NewsDetailFragment extends Fragment{
 // Progress dialog
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-
+        ImageView img1 = (ImageView) view.findViewById(R.id.news_img3);
+        img1.setVisibility(View.GONE);
         return view;
     }
 

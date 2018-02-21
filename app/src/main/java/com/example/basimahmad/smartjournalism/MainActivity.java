@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -214,6 +215,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void get_nav_user() {
+
+        final SharedPreferences.Editor editor = getSharedPreferences("SMART", MODE_PRIVATE).edit();
+
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -254,6 +258,11 @@ public class MainActivity extends AppCompatActivity
                                     .placeholder(R.drawable.dpholderwhit1)
                                     .error(R.drawable.dpholderwhit1)
                                     .into(nav_pic);
+
+                            editor.putString("user_name", name);
+                            editor.putString("user_dp", imageUri);
+
+                            editor.apply();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

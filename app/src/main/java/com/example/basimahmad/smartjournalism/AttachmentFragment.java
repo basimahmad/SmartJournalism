@@ -135,7 +135,6 @@ public class AttachmentFragment extends Fragment{
         return view;
     }
 
-    //Respon dari add button ketika diklik, untuk memunculkan dialog
     void showDialog() {
         new MaterialDialog.Builder(getActivity()).title("Choose file")
                 .items(CHOOSE_FILE)
@@ -146,7 +145,6 @@ public class AttachmentFragment extends Fragment{
                         StrictMode.setVmPolicy(builder.build());
 
                         if (i == 0) {
-                            //Mengambil foto dengan camera
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                             mOutputUri = FileManager.getOutputMediaFileUri(Template.Code.CAMERA_IMAGE_CODE);
@@ -156,7 +154,6 @@ public class AttachmentFragment extends Fragment{
 
                             startActivityForResult(intent, Template.Code.CAMERA_IMAGE_CODE);
                         } else if (i == 1) {
-                            //Mengambil video dengan camera
                             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 
                             mOutputUri = FileManager.getOutputMediaFileUri(Template.Code.CAMERA_VIDEO_CODE);
@@ -167,7 +164,6 @@ public class AttachmentFragment extends Fragment{
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutputUri);
                             startActivityForResult(intent, Template.Code.CAMERA_VIDEO_CODE);
                         } else {
-                            //Mendapatkan file dari storage
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("image/* video/* audio/*");
                             startActivityForResult(intent, Template.Code.FILE_MANAGER_CODE);
@@ -176,7 +172,6 @@ public class AttachmentFragment extends Fragment{
                 }).show();
     }
 
-    //Respon dari upload button ketika diklik, untuk melakukan upload file ke server
     void uploadFile() {
         mRequest.start();
         mMultiPartRequest = new MultiPartRequest(new Response.ErrorListener() {
@@ -209,12 +204,10 @@ public class AttachmentFragment extends Fragment{
         mRequest.add(mMultiPartRequest);
     }
 
-    //Mengisi variable File dari path yang didapat dari storage
     void setFile(int type, Uri uri) {
         mFile.add(new File(FileManager.getPath(getActivity().getApplicationContext(), type, uri)));
     }
 
-    //Respon ketika path file dari storage didapatkan, untuk menampilkan view untuk upload
     void setView(int type, Uri uri) {
         mUpload.setVisibility(Button.VISIBLE);
         if (mFile.size() == 4) {
@@ -336,7 +329,6 @@ public class AttachmentFragment extends Fragment{
         }
     }
 
-    //Mereset tampilan ke semula
     void resetView() {
         mUpload.setVisibility(Button.GONE);
         mImage.setVisibility(ImageView.GONE);
@@ -354,7 +346,6 @@ public class AttachmentFragment extends Fragment{
             mMediaPlayer.pause();
     }
 
-    //Respon dari volley, untuk menampilkan keterengan upload, seperti error, message dari server
     void setResponse(Object response, VolleyError error) {
         String name = "aa0";
         String file1 = null;
@@ -410,7 +401,6 @@ public class AttachmentFragment extends Fragment{
         }
     }
 
-    //Respon dari pengambilan data dari storage
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {

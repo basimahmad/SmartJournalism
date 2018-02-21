@@ -27,6 +27,9 @@ public class AppConfig {
 
     public static String URL_UPLOAD_IMAGE = "http://www.krunchycorner.net/upload_profile_pic.php";
 
+    public static String URL_UPDATE_DATA = "http://www.krunchycorner.net/update_data.php";
+
+
 
 
 

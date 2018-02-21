@@ -51,7 +51,7 @@ public class UserProfileFragment extends Fragment{
     private static final String TAG = "PROFILE_NEWSFEED";
     private SessionManager session;
     String restoredID = "";
-    Button send_message;
+    Button send_message, published_news;
     String fname = "";
     public UserProfileFragment() {
         // Required empty public constructor
@@ -86,6 +86,7 @@ public class UserProfileFragment extends Fragment{
         }
 
         send_message = (Button) view.findViewById(R.id.user_send_message);
+        published_news = (Button) view.findViewById(R.id.user_published_news);
 
         send_message.setOnClickListener(new View.OnClickListener() {
 
@@ -111,7 +112,25 @@ public class UserProfileFragment extends Fragment{
             }
         });
 
+        published_news.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+
+
+
+                Fragment fragment = new OtherUserPublishedNewsFeedFragment();
+
+                if (fragment != null) {
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.content_frame, fragment, "other_user_news");
+                    ft.addToBackStack("other_user_news");
+                    ft.replace(R.id.content_frame, fragment);
+                    ft.commit();
+                }
+
+            }
+        });
 
         return view;
     }

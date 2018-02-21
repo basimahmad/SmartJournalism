@@ -3,6 +3,7 @@ package com.example.basimahmad.smartjournalism;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -11,8 +12,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +23,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +47,11 @@ public class NewsDetailClass extends Activity{
     ImageButton bookmark_button;
     String news_id = "";
     SessionManager session;
+    Firebase reference1, reference2;
+    ImageView sendButton;
+    EditText messageArea;
+    String user_name, user_dp;
+
     boolean bookmark_check = false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +65,33 @@ public class NewsDetailClass extends Activity{
         getNews(news_id);
 
         session = new SessionManager(NewsDetailClass.this);
+      final ArrayList<String> color_name = new ArrayList<String>();
+       final ArrayList<String> image_id = new ArrayList<String>();
+        final ArrayList<String> name = new ArrayList<String>();
 
 
+        SharedPreferences prefs = getSharedPreferences("SMART", MODE_PRIVATE);
+        user_name = prefs.getString("user_name", null);
+        if (user_name == null) {
+            Toast.makeText(NewsDetailClass.this,
+                    "User not found", Toast.LENGTH_LONG).show();
+        }
+        else {
+        }
+        user_dp = prefs.getString("user_dp", null);
+        if (user_dp == null) {
+            Toast.makeText(NewsDetailClass.this,
+                    "User not found", Toast.LENGTH_LONG).show();
+        }
+        else {
+        }
 
+        ImageView img1 = (ImageView) findViewById(R.id.news_img1);
+        img1.setVisibility(View.GONE);
+        ImageView img2 = (ImageView) findViewById(R.id.news_img2);
+        img2.setVisibility(View.GONE);
+        ImageView img3 = (ImageView) findViewById(R.id.news_img3);
+        img3.setVisibility(View.GONE);
 
 
         bookmark_button.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +128,78 @@ public class NewsDetailClass extends Activity{
                 }
 
 
+
+            }
+        });
+
+
+
+
+        sendButton = (ImageView)findViewById(R.id.sendButton);
+        messageArea = (EditText)findViewById(R.id.messageArea);
+
+
+        Firebase.setAndroidContext(NewsDetailClass.this);
+        reference1 = new Firebase("https://citizen-journalism-app.firebaseio.com/comments/" + session.getUserID());
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageText = messageArea.getText().toString();
+
+                if(!messageText.equals("")){
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("comment", messageText);
+                    map.put("name", user_name);
+                    map.put("image", user_dp);
+                    map.put("user", String.valueOf(session.getUserID()));
+                    map.put("news", news_id);
+
+                    reference1.push().setValue(map);
+                    messageArea.setText("");
+                }
+            }
+        });
+
+        reference1.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map map = dataSnapshot.getValue(Map.class);
+                String message = map.get("comment").toString();
+                String userName = map.get("name").toString();
+                String comment = map.get("comment").toString();
+                String image = map.get("image").toString();
+                String news = map.get("news").toString();
+
+                if(news.equals(news_id)) {
+                    color_name.add(comment);
+                    image_id.add(image);
+                    name.add(userName);
+
+                    CustomlistadapterComments adapter = new CustomlistadapterComments(NewsDetailClass.this, image_id, color_name, name);
+                    ListView lv = (ListView) findViewById(R.id.listViewComment);
+                    lv.setAdapter(adapter);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
 
             }
         });
@@ -300,14 +409,15 @@ public class NewsDetailClass extends Activity{
                         TextView tv_des = (TextView) findViewById(R.id.news_news);
                         tv_des.setText(jObj.getString("description"));
 
+                        int[] img_id = {R.id.news_img1, R.id.news_img2, R.id.news_img3};
                         JSONArray files = jObj.getJSONArray("files");
                         for (int i=0; i<files.length(); i++) {
                             String f = files.getString(i);
-                            ImageView nav_pic = (ImageView) findViewById(R.id.news_img1);
+                            ImageView nav_pic = (ImageView) findViewById(img_id[i]);
                             String imageUri = "http://www.krunchycorner.net/uploads/"+f;
                             Picasso.with(getApplicationContext()).load(imageUri)
                                     .into(nav_pic);
-
+                            nav_pic.setVisibility(View.VISIBLE);
                             Log.d(TAG,  f);
                         }
 

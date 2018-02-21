@@ -102,15 +102,13 @@
                     <ImageButton
                         android:layout_width="40dp"
                         android:layout_height="35dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="9dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/camera"
-                        android:id="@+id/imageButton" />
+                        android:id="@+id/imageButton"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="18dp" />
 
                 </RelativeLayout>
 
@@ -185,31 +183,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="20dp">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:textColorHint="@color/colorAccent">
-                        <EditText android:id="@+id/edit_input_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress"
-                            android:hint="Email"
-                            android:textColor="@color/colorAccent"/>
-                    </android.support.design.widget.TextInputLayout>
-
-
-
-                </LinearLayout>
-
 
 
 
@@ -264,29 +237,8 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="20dp">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:textColorHint="@color/colorAccent">
-                        <EditText android:id="@+id/input_bio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:hint="Bio"
-                            android:textColor="@color/colorAccent"/>
-                    </android.support.design.widget.TextInputLayout>
 
 
-                </LinearLayout>
 
             </LinearLayout>
             <Button
