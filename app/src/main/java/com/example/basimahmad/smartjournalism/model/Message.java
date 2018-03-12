@@ -6,6 +6,7 @@ package com.example.basimahmad.smartjournalism.model;
 
 public class Message {
     private int id;
+    private String key;
     private String from;
     private String subject;
     private String message;
@@ -14,6 +15,14 @@ public class Message {
     private String from_id;
     private String to_id;
     private String picture;
+    private boolean isImportant;
+    private boolean isRead;
+    private int color = -1;
+
+
+    public Message(boolean isImportant, boolean isRead, String message, String picture) {
+    }
+
 
     public String getDate() {
         return date;
@@ -39,9 +48,7 @@ public class Message {
         this.from_id = from_id;
     }
 
-    private boolean isImportant;
-    private boolean isRead;
-    private int color = -1;
+
 
     public Message() {
     }
@@ -116,5 +123,13 @@ public class Message {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

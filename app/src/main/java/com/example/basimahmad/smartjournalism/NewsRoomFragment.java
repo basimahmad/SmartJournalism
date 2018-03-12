@@ -44,6 +44,7 @@ public class NewsRoomFragment extends Fragment{
     private static final String URL_Categories = "http://www.krunchycorner.net/categories.php";
 
     View view;
+    TextView live;
     static ArrayList<String> file_names = new ArrayList<String>();
     Button attachment;
     FancyButton publish;
@@ -72,6 +73,8 @@ public class NewsRoomFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_newsroom, container, false);
         attachment = (Button) view.findViewById(R.id.attachment);
         publish = (FancyButton) view.findViewById(R.id.btn_publish);
+        live = (TextView) view.findViewById(R.id.link_LIVE);
+
         _title = (EditText) view.findViewById(R.id.input_title);
         _subject = (EditText) view.findViewById(R.id.input_subject);
         _description = (EditText) view.findViewById(R.id.input_des);
@@ -120,6 +123,15 @@ public class NewsRoomFragment extends Fragment{
                 ft.addToBackStack("newsroom");
                 ft.replace(R.id.content_frame, fragment);
                 ft.commit();
+            }
+        });
+        live.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("LIVECHECK", "1");
+                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.vinternete.camerastream");
+                if (launchIntent != null) {
+                    startActivity(launchIntent);//null pointer check in case package name was not found
+                }
             }
         });
 

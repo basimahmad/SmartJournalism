@@ -3,8 +3,11 @@ package com.example.basimahmad.smartjournalism;
 /**
  * Created by Basim Ahmad on 11/6/2017.
  */
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +37,17 @@ import com.example.basimahmad.smartjournalism.helper.DividerItemDecoration;
 import com.example.basimahmad.smartjournalism.model.Message;
 import com.example.basimahmad.smartjournalism.network.ApiClient;
 import com.example.basimahmad.smartjournalism.network.ApiInterface;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener{
     private List<Message> messages = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -45,6 +56,8 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
     private View view;
+    private SessionManager session;
+
     public InboxFragment() {
         // Required empty public constructor
     }
@@ -59,6 +72,8 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_inbox, container, false);
+
+        session = new SessionManager(getActivity());
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -79,10 +94,14 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("INCHECK", "1");
+                        messages.clear();
+
                         getInbox();
                     }
                 }
         );
+
         return view;
     }
 
@@ -91,39 +110,101 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
      * url: https://api.androidhive.info/json/inbox.json
      */
     private void getInbox() {
-        swipeRefreshLayout.setRefreshing(true);
 
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
 
-        Call<List<Message>> call = apiService.getInbox();
-        call.enqueue(new Callback<List<Message>>() {
+
+
+        Firebase.setAndroidContext(getContext());
+        Firebase ref = new Firebase("https://citizen-journalism-app.firebaseio.com/messages");
+
+        ref.addValueEventListener(new ValueEventListener() {
+
             @Override
-            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                // clear the inbox
-                messages.clear();
+            public void onDataChange(DataSnapshot snapshot) {
+                    messages.clear();
+                    Log.d("COUNTMESSAGES" ,""+snapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Log.d("KEYNAME", postSnapshot.getKey());
+                    String key = postSnapshot.getKey();
+                    int position = key.indexOf("_");
+                    Log.d("KEYPOS", String.valueOf(position));
+                    String substr=key.substring(0,position);
+                    final String substr1=key.substring(position+1);
+                    Log.d("KEYSTR", substr1);
+                    if(substr.equals(String.valueOf(session.getUserID()))){
+                        Log.d("INBOXCHECK", "found");
+                        Firebase ref1 = new Firebase("https://citizen-journalism-app.firebaseio.com/messages/"+key);
+                        messages.clear();
+                        swipeRefreshLayout.setRefreshing(true);
+                        ref1.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
 
-                // add all the messages
-                // messages.addAll(response.body());
+                                Log.d("COUNTMESSAGES1" ,""+snapshot.getChildrenCount());
+                                Message messageObj = new Message();
 
-                // TODO - avoid looping
-                // the loop was performed to add colors to each message
-                for (Message message : response.body()) {
-                    // generate a random color
-                    message.setColor(getRandomMaterialColor("400"));
-                    messages.add(message);
+                                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                                    Log.d("KEYNAME1", postSnapshot.getKey());
+
+                                   /* Message message = snapshot.getValue(Message.class);
+                                    Log.d("COUNTMESSAGE1" ,"1");
+                                    message.setColor(getRandomMaterialColor("400"));
+                                    messages.add(message);*/
+
+                                    String isImpStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("isImportant").getValue());
+                                    String isReadStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("isRead").getValue());
+                                    String msgStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("message").getValue());
+                                    String picStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("picture").getValue());
+                                    String userIdStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("user").getValue());
+                                    String nameStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("to").getValue());
+                                    String timeStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("timestamp").getValue());
+                                    String toIdStr = String.valueOf(snapshot.child(postSnapshot.getKey()).child("to_user").getValue());
+
+                                    boolean isImp = Boolean.parseBoolean(isImpStr);
+                                    boolean isRead = Boolean.parseBoolean(isReadStr);
+
+                                    messageObj.setImportant(isImp);
+                                    messageObj.setRead(isRead);
+                                    messageObj.setMessage(msgStr);
+                                    messageObj.setPicture("http://www.krunchycorner.net/profilePic/"+substr1+".jpg");
+                                    messageObj.setTimestamp(timeStr);
+                                    messageObj.setFrom(nameStr);
+                                    messageObj.setTo_id(toIdStr);
+                                    messageObj.setKey(postSnapshot.getKey());
+                                    messageObj.setColor(getRandomMaterialColor("400"));
+
+
+                                    Log.d("COUNTMESSAGE1", "======="+messages.size());
+
+
+                                }
+                                messages.add(messageObj);
+                                mAdapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                Log.e("The read failed: " ,firebaseError.getMessage());
+                            }
+                        });
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+
+
+
                 }
 
-                mAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e("The read failed: " ,firebaseError.getMessage());
             }
 
-            @Override
-            public void onFailure(Call<List<Message>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Unable to fetch json: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                swipeRefreshLayout.setRefreshing(false);
-            }
         });
+        Log.d("COUNTMESSAGE1", "=======++"+messages.size());
     }
 
     /**
@@ -160,6 +241,9 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onRefresh() {
         // swipe refresh is performed, fetch the messages again
+        Log.d("INCHECK", "2");
+        messages.clear();
+
         getInbox();
     }
 
@@ -195,7 +279,23 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             messages.set(position, message);
             mAdapter.notifyDataSetChanged();
 
-            Toast.makeText(getActivity(), "Read: " + message.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Read: " + String.valueOf(message.getTo_id()), Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences("SMART", MODE_PRIVATE).edit();
+            editor.putString("profile_user_id", String.valueOf(message.getTo_id()));
+            editor.apply();
+
+            Fragment fragment = new ChatFragment();
+
+            if (fragment != null) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.content_frame, fragment, "chat");
+                ft.addToBackStack("chat");
+                ft.replace(R.id.content_frame, fragment);
+                ft.commit();
+            }
+
+
+
         }
     }
 

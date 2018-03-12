@@ -5,8 +5,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.icu.text.DateFormat;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -41,7 +43,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,13 +116,37 @@ public class ChatFragment  extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageText = messageArea.getText().toString();
+                SharedPreferences prefs = getContext().getSharedPreferences("SMART", MODE_PRIVATE);
+                String dp = prefs.getString("user_dp", null);
+                String name_user = prefs.getString("user_name", null);
+                Log.d("DPNAME",dp+"==="+name_user);
 
+
+                String currentDateTimeString = null;
+                String messageText = messageArea.getText().toString();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                     currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                    Log.d("DATETIME", currentDateTimeString);
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("MM'/'dd'/'y hh:mm");
+                String currentDateandTime = sdf.format(new Date());
+                Log.d("DATETIME", currentDateandTime);
                 if(!messageText.equals("")){
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("message", messageText);
+                    map.put("isImportant", "false");
+                    map.put("picture", dp);
                     map.put("user", String.valueOf(session.getUserID()));
+                    map.put("user_name",name_user);
+                    map.put("message", messageText);
+                    map.put("timestamp",currentDateandTime);
+                    map.put("isRead", "false");
+                    map.put("from", name_user);
+                    map.put("to", chatWithName);
+                    map.put("to_user", chatWith);
                     reference1.push().setValue(map);
+                    map.put("to", name_user);
+                    map.put("to_user", String.valueOf(session.getUserID()));
+
                     reference2.push().setValue(map);
                     messageArea.setText("");
                 }

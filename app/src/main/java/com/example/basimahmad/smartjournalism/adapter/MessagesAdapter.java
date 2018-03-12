@@ -46,7 +46,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     private static int currentSelectedIndex = -1;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        public TextView from, subject, message, iconText, timestamp;
+        public TextView from, message, iconText, timestamp;
         public ImageView iconImp, imgProfile;
         public LinearLayout messageContainer;
         public RelativeLayout iconContainer, iconBack, iconFront;
@@ -54,7 +54,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         public MyViewHolder(View view) {
             super(view);
             from = (TextView) view.findViewById(R.id.from);
-            subject = (TextView) view.findViewById(R.id.txt_primary);
             message = (TextView) view.findViewById(R.id.txt_secondary);
             iconText = (TextView) view.findViewById(R.id.icon_text);
             timestamp = (TextView) view.findViewById(R.id.timestamp);
@@ -98,7 +97,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
         // displaying text view data
         holder.from.setText(message.getFrom());
-        holder.subject.setText(message.getSubject());
         holder.message.setText(message.getMessage());
         holder.timestamp.setText(message.getTimestamp());
 
@@ -227,14 +225,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     private void applyReadStatus(MyViewHolder holder, Message message) {
         if (message.isRead()) {
             holder.from.setTypeface(null, Typeface.NORMAL);
-            holder.subject.setTypeface(null, Typeface.NORMAL);
             holder.from.setTextColor(ContextCompat.getColor(mContext, R.color.subject));
-            holder.subject.setTextColor(ContextCompat.getColor(mContext, R.color.message));
         } else {
             holder.from.setTypeface(null, Typeface.BOLD);
-            holder.subject.setTypeface(null, Typeface.BOLD);
             holder.from.setTextColor(ContextCompat.getColor(mContext, R.color.from));
-            holder.subject.setTextColor(ContextCompat.getColor(mContext, R.color.subject));
         }
     }
 

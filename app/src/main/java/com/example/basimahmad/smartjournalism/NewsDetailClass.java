@@ -172,13 +172,13 @@ public class NewsDetailClass extends Activity{
                 String news = map.get("news").toString();
 
                 if(news.equals(news_id)) {
-                    color_name.add(comment);
-                    image_id.add(image);
-                    name.add(userName);
+                        color_name.add(comment);
+                        image_id.add(image);
+                        name.add(userName);
 
-                    CustomlistadapterComments adapter = new CustomlistadapterComments(NewsDetailClass.this, image_id, color_name, name);
-                    ListView lv = (ListView) findViewById(R.id.listViewComment);
-                    lv.setAdapter(adapter);
+                        CustomlistadapterComments adapter = new CustomlistadapterComments(NewsDetailClass.this, image_id, color_name, name);
+                        ListView lv = (ListView) findViewById(R.id.listViewComment);
+                        lv.setAdapter(adapter);
                 }
 
             }
