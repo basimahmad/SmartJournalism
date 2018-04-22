@@ -5,7 +5,8 @@ package com.example.basimahmad.smartjournalism;
  */
  import android.app.Activity;
  import android.app.ProgressDialog;
-        import android.os.Bundle;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
  import android.text.InputType;
  import android.util.Log;
 
@@ -250,6 +251,9 @@ public class LoginActivity extends Activity {
 
                             Log.d(TAG, "user id: "+user_id);
                             session.setUserID(user_id);
+                            SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
+                            editor.putString("email", email);
+                            editor.apply();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

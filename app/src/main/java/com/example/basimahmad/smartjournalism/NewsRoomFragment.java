@@ -5,6 +5,7 @@ package com.example.basimahmad.smartjournalism;
  */
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.basimahmad.smartjournalism.R;
 import com.android.volley.Request;
@@ -28,6 +30,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import android.widget.AdapterView.OnItemSelectedListener;
 import com.example.basimahmad.smartjournalism.R;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +45,8 @@ import java.util.List;
 import java.util.Map;
 
 import mehdi.sakout.fancybuttons.FancyButton;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class NewsRoomFragment extends Fragment{
     private static final String URL_Categories = "http://www.krunchycorner.net/categories.php";
@@ -127,11 +135,13 @@ public class NewsRoomFragment extends Fragment{
         });
         live.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+
+                sendNotification();
+
                 Log.d("LIVECHECK", "1");
-                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.vinternete.camerastream");
-                if (launchIntent != null) {
-                    startActivity(launchIntent);//null pointer check in case package name was not found
-                }
+                Intent intent = new Intent(getContext(), LiveBroadcast.class);
+                startActivity(intent);
             }
         });
 
@@ -322,5 +332,22 @@ public class NewsRoomFragment extends Fragment{
 
         //adding our stringrequest to queue
         Volley.newRequestQueue(getActivity()).add(stringRequest);
+    }
+
+
+    private void sendNotification(){
+        SharedPreferences prefs = getContext().getSharedPreferences("SMART", MODE_PRIVATE);
+        String name_user = prefs.getString("user_name", null);
+
+
+        Firebase.setAndroidContext(getContext());
+        Firebase reference = new Firebase("https://citizen-journalism-app.firebaseio.com/live_notification");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", String.valueOf(session.getUserID()));
+        map.put("user", name_user);
+        reference.push().setValue(map);
+
+
+
     }
 }

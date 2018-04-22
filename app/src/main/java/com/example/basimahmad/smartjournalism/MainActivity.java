@@ -3,9 +3,11 @@ package com.example.basimahmad.smartjournalism;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -20,6 +22,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,10 +36,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.basimahmad.smartjournalism.SharedPrefManagerPackage.SharedPrefManager;
+import com.example.basimahmad.smartjournalism.utils.NotificationUtils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -48,7 +56,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import Tempelate.Template;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import cz.msebera.android.httpclient.util.TextUtils;
+
+import static com.example.basimahmad.smartjournalism.AppConfig.URL_REGISTER_DEVICE;
 
 
 public class MainActivity extends AppCompatActivity
@@ -60,6 +72,8 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog pDialog;
     static Context context;
     private SessionManager session;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +82,25 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         manager = getFragmentManager();
+
+
+
+        SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String email = prefs.getString("email", null);
+
+        String token = SharedPrefManager.getInstance(this).getDeviceToken();
+
+        //if token is not null
+        if (token != null) {
+         Log.d("TOKEN_CHECK", token);
+            sendTokenToServer(email, token);
+        } else {
+            //if token is null that means something wrong
+            Log.d("TOKEN_CHECK", "Token not generated");
+        }
+
+
+
 
         MainActivity.context = getApplicationContext();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -346,5 +379,56 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
+
+    private void sendTokenToServer(final String email, final String token) {
+        Log.d("RED_DEVICE", email + "----" + token);
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                AppConfig.URL_REGISTER_DEVICE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    Toast.makeText(MainActivity.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+                params.put("token", token);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+
+    }
 
 }

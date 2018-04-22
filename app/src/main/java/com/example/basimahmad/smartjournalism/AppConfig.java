@@ -29,6 +29,8 @@ public class AppConfig {
 
     public static String URL_UPDATE_DATA = "http://www.krunchycorner.net/update_data.php";
 
+    public static String URL_REGISTER_DEVICE = "http://krunchycorner.net/register_device.php";
+
 
 
 
