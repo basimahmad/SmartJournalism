@@ -4,6 +4,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -20,6 +21,8 @@ allprojects {
         jcenter()
         mavenCentral()
         maven {  url 'https://dl.bintray.com/spark/maven' }
+        maven { url 'https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/' }
+
     }
 }
 

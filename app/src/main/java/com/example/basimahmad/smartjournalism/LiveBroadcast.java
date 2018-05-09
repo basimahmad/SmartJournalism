@@ -3,6 +3,7 @@ package com.example.basimahmad.smartjournalism;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -90,7 +91,7 @@ public class LiveBroadcast extends Activity implements RtspClient.Callback,
                 .setAudioEncoder(SessionBuilder.AUDIO_NONE)
                 .setAudioQuality(new AudioQuality(8000, 16000))
                 .setVideoEncoder(SessionBuilder.VIDEO_H264)
-                .setSurfaceView(mSurfaceView).setPreviewOrientation(0)
+                .setSurfaceView(mSurfaceView).setPreviewOrientation(90)
                 .setCallback(this).build();
 
         // Configures the RTSP client
@@ -102,16 +103,19 @@ public class LiveBroadcast extends Activity implements RtspClient.Callback,
 
         // We parse the URI written in the Editext
         Pattern uri = Pattern.compile("rtsp://(.+):(\\d+)/(.+)");
-        Matcher m = uri.matcher("rtsp://172.20.10.3:1935/live/myStream");
+        Matcher m = uri.matcher("rtsp://192.168.8.101:1935/live/myStream");
         m.find();
         ip = m.group(1);
         port = m.group(2);
         path = m.group(3);
 
-        mClient.setCredentials("User",
-                "1New123123");
+        mClient.setCredentials("Basim",
+                "aphtslvkh96");
         mClient.setServerAddress(ip, Integer.parseInt(port));
         mClient.setStreamPath("/" + path);
+
+        mSession.setPreviewOrientation(90);
+        mSession.configure();
     }
 
     private void toggleStreaming() {

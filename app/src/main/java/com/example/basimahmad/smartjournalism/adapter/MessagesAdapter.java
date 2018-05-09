@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -107,6 +108,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         holder.itemView.setActivated(selectedItems.get(position, false));
 
         // change the font style depending on message read status
+        Log.d("READ_CHECK", "1");
         applyReadStatus(holder, message);
 
         // handle message star
@@ -223,10 +225,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
     private void applyReadStatus(MyViewHolder holder, Message message) {
+        Log.d("READ_CHECK", "2");
         if (message.isRead()) {
+            Log.d("READ_CHECK", "3");
             holder.from.setTypeface(null, Typeface.NORMAL);
             holder.from.setTextColor(ContextCompat.getColor(mContext, R.color.subject));
         } else {
+            Log.d("READ_CHECK", "4");
             holder.from.setTypeface(null, Typeface.BOLD);
             holder.from.setTextColor(ContextCompat.getColor(mContext, R.color.from));
         }

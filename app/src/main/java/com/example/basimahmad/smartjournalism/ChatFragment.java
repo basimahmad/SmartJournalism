@@ -193,23 +193,23 @@ public class ChatFragment  extends Fragment {
     }
 
     public void addMessageBox(String message, int type){
-        TextView textView = new TextView(getContext());
-        textView.setText(message);
-
-        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp2.weight = 1.0f;
-
-        if(type == 1) {
-            lp2.gravity = Gravity.LEFT;
-           //  textView.setBackgroundResource(R.color.gray);
-        }
-        else{
-            lp2.gravity = Gravity.RIGHT;
-           //  textView.setBackgroundResource(R.color.colorAccent);
-        }
-        textView.setLayoutParams(lp2);
-        layout.addView(textView);
-        scrollView.fullScroll(View.FOCUS_DOWN);
+//        TextView textView = new TextView(getContext());
+//        textView.setText(message);
+//
+//        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        lp2.weight = 1.0f;
+//
+//        if(type == 1) {
+//            lp2.gravity = Gravity.LEFT;
+//           //  textView.setBackgroundResource(R.color.gray);
+//        }
+//        else{
+//            lp2.gravity = Gravity.RIGHT;
+//           //  textView.setBackgroundResource(R.color.colorAccent);
+//        }
+//        textView.setLayoutParams(lp2);
+//        layout.addView(textView);
+//        scrollView.fullScroll(View.FOCUS_DOWN);
     }
 
 

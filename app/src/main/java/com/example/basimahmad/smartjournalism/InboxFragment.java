@@ -3,6 +3,7 @@ package com.example.basimahmad.smartjournalism;
 /**
  * Created by Basim Ahmad on 11/6/2017.
  */
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -166,7 +167,12 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                                     messageObj.setImportant(isImp);
                                     messageObj.setRead(isRead);
                                     messageObj.setMessage(msgStr);
-                                    messageObj.setPicture("http://www.krunchycorner.net/profilePic/"+substr1+".jpg");
+                                    if(substr1.equals("0")){
+                                        messageObj.setPicture("http://www.krunchycorner.net/profilePic/admin.png");
+                                    }
+                                    else {
+                                        messageObj.setPicture("http://www.krunchycorner.net/profilePic/" + substr1 + ".jpg");
+                                    }
                                     messageObj.setTimestamp(timeStr);
                                     messageObj.setFrom(nameStr);
                                     messageObj.setTo_id(toIdStr);
@@ -212,7 +218,7 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
      */
     private int getRandomMaterialColor(String typeColor) {
         int returnColor = Color.GRAY;
-        int arrayId = getResources().getIdentifier("mdcolor_" + typeColor, "array", getActivity().getPackageName());
+        int arrayId = getContext().getResources().getIdentifier("mdcolor_" + typeColor, "array", getActivity().getPackageName());
 
         if (arrayId != 0) {
             TypedArray colors = getResources().obtainTypedArray(arrayId);
@@ -284,17 +290,18 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             editor.putString("profile_user_id", String.valueOf(message.getTo_id()));
             editor.apply();
 
-            Fragment fragment = new ChatFragment();
+//            Fragment fragment = new ChatFragment();
+//
+//            if (fragment != null) {
+//                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                ft.add(R.id.content_frame, fragment, "chat");
+//                ft.addToBackStack("chat");
+//                ft.replace(R.id.content_frame, fragment);
+//                ft.commit();
+//            }
 
-            if (fragment != null) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.add(R.id.content_frame, fragment, "chat");
-                ft.addToBackStack("chat");
-                ft.replace(R.id.content_frame, fragment);
-                ft.commit();
-            }
-
-
+            Intent i = new Intent(getContext(), ChatActivity.class);
+            startActivity(i);
 
         }
     }
@@ -316,12 +323,12 @@ public class InboxFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mAdapter.toggleSelection(position);
         int count = mAdapter.getSelectedItemCount();
 
-        if (count == 0) {
-            actionMode.finish();
-        } else {
-            actionMode.setTitle(String.valueOf(count));
-            actionMode.invalidate();
-        }
+//        if (count == 0) {
+//            actionMode.finish();
+//        } else {
+//            actionMode.setTitle(String.valueOf(count));
+//            actionMode.invalidate();
+//        }
     }
 
 

@@ -31,6 +31,9 @@ public class AppConfig {
 
     public static String URL_REGISTER_DEVICE = "http://krunchycorner.net/register_device.php";
 
+    public static String URL_GET_ALL_NOTIFICATION = "http://www.krunchycorner.net/getAllNotifications.php";
+
+    public static String URL_GET_NOTIFICATION = "http://www.krunchycorner.net/getNotificationMobile.php";
 
 
 

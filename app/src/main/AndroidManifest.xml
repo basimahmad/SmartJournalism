@@ -51,6 +51,7 @@
 
         <activity android:name=".SignupActivity" />
         <activity android:name=".LiveBroadcast" />
+        <activity android:name=".ChatActivity" />
 
         <activity android:name=".ForgetPass" />
         <activity android:name=".NewsDetailClass" />

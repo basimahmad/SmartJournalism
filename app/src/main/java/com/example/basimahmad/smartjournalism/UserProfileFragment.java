@@ -99,15 +99,17 @@ public class UserProfileFragment extends Fragment{
 
 
 
-                Fragment fragment = new ChatFragment();
-
-                if (fragment != null) {
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.content_frame, fragment, "chat");
-                    ft.addToBackStack("chat");
-                    ft.replace(R.id.content_frame, fragment);
-                    ft.commit();
-                }
+//                Fragment fragment = new ChatFragment();
+//
+//                if (fragment != null) {
+//                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                    ft.add(R.id.content_frame, fragment, "chat");
+//                    ft.addToBackStack("chat");
+//                    ft.replace(R.id.content_frame, fragment);
+//                    ft.commit();
+//                }
+                Intent i = new Intent(getContext(), ChatActivity.class);
+                startActivity(i);
 
             }
         });

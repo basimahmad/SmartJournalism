@@ -43,6 +43,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.basimahmad.smartjournalism.Notifications.NotificationFragment;
 import com.example.basimahmad.smartjournalism.SharedPrefManagerPackage.SharedPrefManager;
 import com.example.basimahmad.smartjournalism.utils.NotificationUtils;
 import com.squareup.picasso.Picasso;
@@ -151,7 +152,15 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Log.d("NOTI", "1");
+            Fragment fragment = new NotificationFragment();
+            if (fragment != null) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.content_frame, fragment, "notification");
+                ft.addToBackStack("notification");
+                ft.replace(R.id.content_frame, fragment);
+                ft.commit();
+            }
         }
 
         return super.onOptionsItemSelected(item);
